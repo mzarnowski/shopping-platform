@@ -1,6 +1,7 @@
 package dev.mzarnowski.shopping.product.pricing;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
 public final class ProductPricingService {
@@ -14,8 +15,14 @@ public final class ProductPricingService {
         this.roundingStrategy = roundingStrategy;
     }
 
-    Price priceProducts(UUID productId, long quantity) {
+    Optional<Price> priceProducts(UUID productId, long quantity) {
+        if (quantity < 1) throw new IllegalArgumentException("Unsupported quantity: " + quantity);
+
         var unitPrice = unitPriceProvider.apply(productId);
+        return unitPrice.map(it -> calculatePrice(productId, quantity, it));
+    }
+
+    private Price calculatePrice(UUID productId, long quantity, BigDecimal unitPrice) {
         var totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
 
         var discount = discountProvider.getApplicableDiscountFor(productId, quantity);

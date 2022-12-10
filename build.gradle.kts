@@ -10,8 +10,16 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web:3.0.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.0")
+
+    testImplementation("org.assertj:assertj-core:3.23.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+}
+
+tasks.getByName<JavaCompile>("compileJava"){
+    options.compilerArgs.add("-parameters")
 }
 
 tasks.getByName<Test>("test") {
