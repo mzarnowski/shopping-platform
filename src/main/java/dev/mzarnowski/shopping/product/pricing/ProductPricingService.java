@@ -26,7 +26,7 @@ public final class ProductPricingService {
         var totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
 
         var discount = discountProvider.getApplicableDiscountFor(productId, quantity);
-        var discountedPrice = discount.applyTo(new Price(totalPrice));
+        var discountedPrice = discount.applyTo(new Price(totalPrice), quantity);
 
         return roundingStrategy.round(discountedPrice);
     }

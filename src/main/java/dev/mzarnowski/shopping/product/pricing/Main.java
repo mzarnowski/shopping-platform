@@ -34,12 +34,6 @@ public class Main {
     }
 
     @Bean
-    DiscountProvider staticDiscountProvider() {
-        var ninetyPercent = BigDecimal.valueOf(9, 1);
-        return (id, quantity) -> (price) -> new Price(price.value().multiply(ninetyPercent));
-    }
-
-    @Bean
     ProductPricingService service(UnitPriceProvider unitPriceProvider, DiscountProvider discountProvider, PriceRoundingStrategy roundingStrategy) {
         return new ProductPricingService(unitPriceProvider, discountProvider, roundingStrategy);
     }

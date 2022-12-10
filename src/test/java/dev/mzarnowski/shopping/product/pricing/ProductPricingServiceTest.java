@@ -10,7 +10,7 @@ import java.util.UUID;
 class ProductPricingServiceTest {
     public static final UUID PRODUCT_ID = UUID.randomUUID();
     public static final int QUANTITY = 10_000_000;
-    public static final BigDecimal UNIT_PRICE = BigDecimal.valueOf(999, 3); // 9.99
+    public static final BigDecimal UNIT_PRICE = new BigDecimal("9.99");
     public static final UnitPriceProvider UNIT_PRICE_PROVIDER = id -> Optional.of(UNIT_PRICE);
     public static final PriceRoundingStrategy NO_ROUNDING = x -> x;
 
@@ -29,7 +29,7 @@ class ProductPricingServiceTest {
     @Test
     public void applies_discount() {
         // given a discount
-        Discount discount = (originalPrice) -> new Price(BigDecimal.ONE);
+        Discount discount = (price, quantity) -> new Price(BigDecimal.ONE);
         var service = new ProductPricingService(UNIT_PRICE_PROVIDER, (id, n) -> discount, NO_ROUNDING);
 
         // when calculating price
@@ -42,7 +42,7 @@ class ProductPricingServiceTest {
     @Test
     public void rounds_discounted_price() {
         // given a discount and rounding strategy
-        Discount discount = (price) -> new Price(BigDecimal.ONE);
+        Discount discount = (price, quantity) -> new Price(BigDecimal.ONE);
         PriceRoundingStrategy rounding = (price) -> new Price(BigDecimal.TEN);
         var service = new ProductPricingService(UNIT_PRICE_PROVIDER, (id, n) -> discount, rounding);
 
