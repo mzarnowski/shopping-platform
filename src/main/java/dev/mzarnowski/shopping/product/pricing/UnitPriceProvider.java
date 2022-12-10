@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @FunctionalInterface
-public interface UnitPriceProvider {
+interface UnitPriceProvider {
     BigDecimal apply(UUID productId);
 }
