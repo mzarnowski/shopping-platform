@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Configuration
-class DiscountConfiguration {
+class StaticDiscountsConfiguration {
     @Bean
     @ConditionalOnProperty("discount.linear.min")
     Discount linearDiscountPolicy(@Value("${discount.linear.min}") BigDecimal min,
@@ -25,10 +25,7 @@ class DiscountConfiguration {
     }
 
     @Bean
-    DiscountProvider staticDiscountProvider(List<Discount> discounts) {
-        Discount discount = discounts.isEmpty() ? Discount.NONE : discounts.get(0);
-        return (id, quantity) -> discount;
+    DiscountRepository staticDiscountRepository(List<Discount> discounts) {
+        return (id, quantity) -> discounts;
     }
-
-
 }

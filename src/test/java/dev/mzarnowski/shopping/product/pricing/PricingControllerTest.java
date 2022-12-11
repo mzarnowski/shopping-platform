@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.UUID;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "discount.conflict.resolution=single-highest-discount")
 public class PricingControllerTest {
     private static final UUID PRODUCT_ID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 

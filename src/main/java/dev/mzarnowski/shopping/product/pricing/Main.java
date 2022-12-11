@@ -28,13 +28,21 @@ public class Main {
     }
 
     @Bean
-    PriceRoundingStrategy staticRoundingStrategy() {
-        var smallestValue = BigDecimal.valueOf(1, 2);
+    PriceRoundingStrategy atLeast_0_01() {
+        var smallestValue = new BigDecimal("0.01");
         return (price) -> new Price(smallestValue.max(price.value()).stripTrailingZeros());
     }
 
     @Bean
-    ProductPricingService service(UnitPriceProvider unitPriceProvider, DiscountProvider discountProvider, PriceRoundingStrategy roundingStrategy) {
+    ProductPricingService service(UnitPriceProvider unitPriceProvider,
+                                  DiscountRepository discountRepository,
+                                  PriceRoundingStrategy roundingStrategy,
+                                  DiscountConflictResolutionStrategy discountConflictResolutionStrategy) {
+        DiscountProvider discountProvider = (id, quantity) -> {
+            var discounts = discountRepository.getApplicableDiscountFor(id, quantity);
+            return discountConflictResolutionStrategy.resolve(discounts);
+        };
+
         return new ProductPricingService(unitPriceProvider, discountProvider, roundingStrategy);
     }
 }
