@@ -13,4 +13,5 @@ RUN groupadd -g 9000 shopping-platform && \
 USER shopping-platform-user:shopping-platform
 COPY --from=build /opt/shopping-platform /opt/shopping-platform
 
+EXPOSE 8080
 CMD ["/opt/shopping-platform/bin/shopping-platform"]
