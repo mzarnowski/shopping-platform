@@ -35,6 +35,18 @@ public class PricingControllerTest {
     }
 
     @Test
+    public void quantity_is_optional() {
+        // given
+        var uri = URI.create("http://localhost:%s/product/%s/price".formatted(port, PRODUCT_ID));
+
+        // when
+        var price = rest.getForObject(uri, Price.class);
+
+        // then
+        Assertions.assertThat(price).isEqualTo(new Price(new BigDecimal("1.99")));
+    }
+
+    @Test
     public void receives_404_for_non_existing_product() {
         // given
         var uri = priceProductUri(UUID.randomUUID(), 10);

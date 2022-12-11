@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -18,10 +19,10 @@ class PricingController {
         this.pricingService = pricingService;
     }
 
-    @GetMapping(path = "/product/{id}/price", params = "quantity")
-    public Price price(@PathVariable UUID id, long quantity) {
+    @GetMapping(path = "/product/{id}/price")
+    public Price price(@PathVariable UUID id, Optional<Long> quantity) {
         try {
-            var price = pricingService.priceProducts(id, quantity);
+            var price = pricingService.priceProducts(id, quantity.orElse(1L));
             return price.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "No such product: " + id));
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
