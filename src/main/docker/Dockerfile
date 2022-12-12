@@ -2,7 +2,7 @@ FROM eclipse-temurin:17-jdk-focal as build
 
 COPY . repository
 RUN cd /repository && \
-    ./gradlew distTar && \
+    ./gradlew build && \
     tar xf /repository/build/distributions/shopping-platform.tar -C /opt
 
 FROM eclipse-temurin:17-jre-focal
